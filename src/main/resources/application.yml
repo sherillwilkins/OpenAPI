@@ -1,0 +1,23 @@
+server:
+  # ????????? 8080 (????? 8080)
+  port: 8080
+
+spring:
+  # ?????
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql:///database?serverTimezone=Asia/Shanghai&useSSL=false&characterEncoding=UTF-8
+    username: root
+    password: root
+
+# ?? mybatis-plus
+mybatis-plus:
+  configuration:
+    # ???????????????????????????????????????
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  type-aliases-package: com.w83ll43.openapi.entity
+  mapper-locations: classpath:mapper/*.xml
+
+
