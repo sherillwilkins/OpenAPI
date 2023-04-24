@@ -3,6 +3,9 @@ package com.w83ll43.openapi.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.w83ll43.openapi.common.Result;
 import com.w83ll43.openapi.entity.User;
+import com.w83ll43.openapi.vo.UserVo;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
 * @author w83ll43
@@ -19,4 +22,13 @@ public interface UserService extends IService<User> {
      * @return
      */
     Result<User> register(String username, String password, String checkPassword);
+
+    /**
+     * 用户登录
+     * @param username
+     * @param password
+     * @param request
+     * @return
+     */
+    Result<UserVo> login(String username, String password, HttpServletRequest request);
 }
