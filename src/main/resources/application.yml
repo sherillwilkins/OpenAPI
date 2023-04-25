@@ -1,9 +1,9 @@
 server:
-  # ????????? 8080 (????? 8080)
+  # 配置服务端口 8080 (默认端口为 8080)
   port: 8080
 
 spring:
-  # ?????
+  # 配置数据源
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
@@ -11,10 +11,10 @@ spring:
     username: root
     password: root
 
-# ?? mybatis-plus
+# 配置 mybatis-plus
 mybatis-plus:
   configuration:
-    # ???????????????????????????????????????
+    # 在映射实体或者属性时，将数据库中表名和字段名中的下划线去掉，按照驼峰命名法映射
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   type-aliases-package: com.w83ll43.openapi.entity
