@@ -1,5 +1,6 @@
 package com.w83ll43.openapi.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.w83ll43.openapi.common.Result;
 import com.w83ll43.openapi.entity.InterfaceInfo;
@@ -28,4 +29,12 @@ public interface InterfaceInfoService extends IService<InterfaceInfo> {
      * @return
      */
     Result<InterfaceInfo> getInterfaceById(Long id, HttpServletRequest request);
+
+    /**
+     * 分页查询
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    Result<Page> page(int page, int pageSize, HttpServletRequest request);
 }

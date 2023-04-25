@@ -1,5 +1,7 @@
 package com.w83ll43.openapi.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.w83ll43.openapi.common.Result;
 import com.w83ll43.openapi.entity.InterfaceInfo;
@@ -79,6 +81,36 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         // 3、查询
         InterfaceInfo interfaceInfo = this.getById(id);
         return Result.success(interfaceInfo);
+    }
+
+    /**
+     * 分页查询
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public Result<Page> page(int page, int pageSize, HttpServletRequest request) {
+        // 1、校验
+        if (page <= 0 || pageSize <= 0) {
+            return Result.error("参数错误");
+        }
+
+        // 2、判断用户是否登录
+        User user = (User) request.getSession().getAttribute("user_login_status");
+        if (user == null) {
+            return Result.error("用户未登录");
+        }
+
+        // 3、查询
+        Page<InterfaceInfo> pageInfo = new Page<>(page, pageSize);
+
+        QueryWrapper<InterfaceInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByAsc("createTime");
+
+        this.page(pageInfo, queryWrapper);
+
+        return Result.success(pageInfo);
     }
 }
 

@@ -1,5 +1,6 @@
 package com.w83ll43.openapi.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.w83ll43.openapi.common.Result;
 import com.w83ll43.openapi.entity.InterfaceInfo;
 import com.w83ll43.openapi.service.InterfaceInfoService;
@@ -37,6 +38,17 @@ public class InterfaceInfoController {
     @GetMapping("/{id}")
     public Result<InterfaceInfo> getInterfaceById(@PathVariable Long id, HttpServletRequest request) {
         return interfaceInfoService.getInterfaceById(id, request);
+    }
+
+    /**
+     * 分页查询
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    @GetMapping("/page")
+    public Result<Page> page(int page, int pageSize, HttpServletRequest request) {
+        return interfaceInfoService.page(page, pageSize, request);
     }
 
 }
