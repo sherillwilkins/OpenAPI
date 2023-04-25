@@ -33,15 +33,29 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Override
     public Result<User> register(String username, String password, String checkPassword) {
         // 1、校验
+        // 参数不能为空
+        if (StringUtils.isAnyBlank(username, password, checkPassword)) {
+            return Result.error("参数不能为空");
+        }
+
         if (!password.equals(checkPassword)) {
             return Result.error("两次密码不一致！");
         }
 
-        // 2、加密密码
+        // 2、查询用户是否已经注册
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username", username);
+        User user = this.baseMapper.selectOne(queryWrapper);
+
+        if (user != null) {
+            return Result.error("用户已经存在");
+        }
+
+        // 3、加密密码
         String encryptPassword = DigestUtils.md5DigestAsHex(password.getBytes());
 
-        // 3、插入数据
-        User user = new User();
+        // 4、插入数据
+        user = new User();
         user.setUsername(username);
         user.setPassword(encryptPassword);
         this.save(user);
@@ -82,12 +96,30 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
 
         // 3.2、用户存在
-        request.getSession().setAttribute("user_login_state", user);
+        request.getSession().setAttribute("user_login_status", user);
 
         // User 转换为 UserVo
         UserVo userVo = new UserVo();
         BeanUtils.copyProperties(user, userVo);
         return Result.success(userVo);
+    }
+
+    /**
+     * 用户登出
+     * @param request
+     * @return
+     */
+    @Override
+    public Result<String> logout(HttpServletRequest request) {
+        // 1、判断用户是否已经登录
+        User user = (User)request.getSession().getAttribute("user_login_status");
+        if (user == null) {
+            return Result.error("用户未登录");
+        }
+
+        // 2、移除 session 信息
+        request.getSession().removeAttribute("user_login_status");
+        return Result.success("退出登录成功");
     }
 }
 
