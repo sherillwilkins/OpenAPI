@@ -64,7 +64,7 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
     @Override
     public Result<InterfaceInfo> getInterfaceById(Long id, HttpServletRequest request) {
         // 1、校验
-        if (id == null) {
+        if (id <= 0) {
             return Result.error("请求参数错误");
         }
 
@@ -111,6 +111,71 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         this.page(pageInfo, queryWrapper);
 
         return Result.success(pageInfo);
+    }
+
+    /**
+     * 根据 ID 更新接口信息
+     * @param interfaceInfo
+     * @param request
+     * @return
+     */
+    @Override
+    public Result<String> updateInterfaceById(InterfaceInfo interfaceInfo, HttpServletRequest request) {
+        // 1、校验
+        if (interfaceInfo == null) {
+            return Result.error("请求参数错误");
+        }
+
+        if (interfaceInfo.getId() == null) {
+            return Result.error("未知接口");
+        }
+
+        // 2、判断用户是否登录以及用户是否拥有权限
+        User user = (User) request.getSession().getAttribute("user_login_status");
+        if (user == null) {
+            return Result.error("用户未登录");
+        }
+
+        if (!user.getUsername().equals("w83ll43")) {
+            return Result.error("用户未授权");
+        }
+
+        // 3、修改公共字段的值
+        interfaceInfo.setUpdateTime(LocalDateTime.now());
+
+        // 4、更新
+        this.updateById(interfaceInfo);
+
+        return Result.success("更新接口信息成功");
+    }
+
+    /**
+     * 根据 ID 删除接口
+     * @param id
+     * @param request
+     * @return
+     */
+    @Override
+    public Result<String> deleteInterfaceById(Long id, HttpServletRequest request) {
+        // 1、校验
+        if (id <= 0) {
+            return Result.error("参数错误");
+        }
+
+        // 2、判断用户是否登录、是否拥有权限
+        User user = (User) request.getSession().getAttribute("user_login_status");
+        if (user == null) {
+            return Result.error("用户未登录");
+        }
+
+        if (!user.getUsername().equals("w83ll43")) {
+            return Result.error("用户未授权");
+        }
+
+        // 3、删除
+        this.removeById(id);
+
+        return Result.success("删除接口成功");
     }
 }
 

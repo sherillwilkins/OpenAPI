@@ -37,4 +37,20 @@ public interface InterfaceInfoService extends IService<InterfaceInfo> {
      * @return
      */
     Result<Page> page(int page, int pageSize, HttpServletRequest request);
+
+    /**
+     * 根据 ID 更新接口信息
+     * @param interfaceInfo
+     * @param request
+     * @return
+     */
+    Result<String> updateInterfaceById(InterfaceInfo interfaceInfo, HttpServletRequest request);
+
+    /**
+     * 根据 ID 删除接口
+     * @param id
+     * @param request
+     * @return
+     */
+    Result<String> deleteInterfaceById(Long id, HttpServletRequest request);
 }

@@ -51,4 +51,26 @@ public class InterfaceInfoController {
         return interfaceInfoService.page(page, pageSize, request);
     }
 
+    /**
+     * 根据 ID 更新接口信息
+     * @param interfaceInfo
+     * @param request
+     * @return
+     */
+    @PutMapping("/update")
+    public Result<String> updateInterfaceById(@RequestBody InterfaceInfo interfaceInfo, HttpServletRequest request) {
+        return interfaceInfoService.updateInterfaceById(interfaceInfo, request);
+    }
+
+    /**
+     * 根据 ID 删除接口
+     * @param id
+     * @param request
+     * @return
+     */
+    @DeleteMapping("/{id}")
+    public Result<String> deleteInterfaceById(@PathVariable Long id, HttpServletRequest request) {
+        return interfaceInfoService.deleteInterfaceById(id, request);
+    }
+
 }
