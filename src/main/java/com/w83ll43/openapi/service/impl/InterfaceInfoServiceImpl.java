@@ -3,6 +3,8 @@ package com.w83ll43.openapi.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.w83ll43.openapi.common.BusinessException;
+import com.w83ll43.openapi.common.Code;
 import com.w83ll43.openapi.common.Result;
 import com.w83ll43.openapi.entity.InterfaceInfo;
 import com.w83ll43.openapi.entity.User;
@@ -33,7 +35,7 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
     public Result<InterfaceInfo> addInterface(InterfaceInfo interfaceInfo, HttpServletRequest request) {
         // 1、校验
         if (StringUtils.isAnyBlank(interfaceInfo.getName(), interfaceInfo.getUrl(), interfaceInfo.getMethod())) {
-            return Result.error("必要参数为空");
+            throw new BusinessException(Code.PARAMS_ERROR.getCode(), "请求参数错误");
         }
 
         // 2、判断用户是否拥有权限
@@ -65,22 +67,37 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
     public Result<InterfaceInfo> getInterfaceById(Long id, HttpServletRequest request) {
         // 1、校验
         if (id <= 0) {
-            return Result.error("请求参数错误");
+            throw new BusinessException(Code.PARAMS_ERROR.getCode(), "参数错误");
         }
 
         // 2、判断用户是否登录、是否授权
-        User user = (User) request.getSession().getAttribute("user_login_status");
-        if (user == null) {
-            return Result.error("用户未登录");
-        }
-
-        if (!user.getUsername().equals("w83ll43")) {
-            return Result.error("用户未授权");
-        }
+        IsUserLogin(request);
 
         // 3、查询
         InterfaceInfo interfaceInfo = this.getById(id);
+
+        if (interfaceInfo == null) {
+            throw new BusinessException(Code.NO_SUCH_INTERFACE.getCode(), "接口不存在勒");
+        }
+
         return Result.success(interfaceInfo);
+    }
+
+
+    /**
+     * 抽取的方法
+     * 判断用户是否登录、是否拥有权限
+     * @param request
+     */
+    private void IsUserLogin(HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user_login_status");
+        if (user == null) {
+            throw new BusinessException(Code.NOT_LOGIN.getCode(), "用户未登录");
+        }
+
+        if (!user.getUsername().equals("w83ll43")) {
+            throw new BusinessException(Code.NO_AUTH_ERROR.getCode(), "用户无权限");
+        }
     }
 
     /**
@@ -93,13 +110,13 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
     public Result<Page> page(int page, int pageSize, HttpServletRequest request) {
         // 1、校验
         if (page <= 0 || pageSize <= 0) {
-            return Result.error("参数错误");
+            throw new BusinessException(Code.PARAMS_ERROR.getCode(), "请求参数错误");
         }
 
         // 2、判断用户是否登录
         User user = (User) request.getSession().getAttribute("user_login_status");
         if (user == null) {
-            return Result.error("用户未登录");
+            throw new BusinessException(Code.NOT_LOGIN.getCode(), "用户未登录");
         }
 
         // 3、查询
@@ -123,7 +140,7 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
     public Result<String> updateInterfaceById(InterfaceInfo interfaceInfo, HttpServletRequest request) {
         // 1、校验
         if (interfaceInfo == null) {
-            return Result.error("请求参数错误");
+            throw new BusinessException(Code.PARAMS_ERROR.getCode(), "请求参数错误");
         }
 
         if (interfaceInfo.getId() == null) {
@@ -131,14 +148,7 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         }
 
         // 2、判断用户是否登录以及用户是否拥有权限
-        User user = (User) request.getSession().getAttribute("user_login_status");
-        if (user == null) {
-            return Result.error("用户未登录");
-        }
-
-        if (!user.getUsername().equals("w83ll43")) {
-            return Result.error("用户未授权");
-        }
+        IsUserLogin(request);
 
         // 3、修改公共字段的值
         interfaceInfo.setUpdateTime(LocalDateTime.now());
@@ -159,18 +169,11 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
     public Result<String> deleteInterfaceById(Long id, HttpServletRequest request) {
         // 1、校验
         if (id <= 0) {
-            return Result.error("参数错误");
+            throw new BusinessException(Code.PARAMS_ERROR.getCode(), "请求参数错误");
         }
 
         // 2、判断用户是否登录、是否拥有权限
-        User user = (User) request.getSession().getAttribute("user_login_status");
-        if (user == null) {
-            return Result.error("用户未登录");
-        }
-
-        if (!user.getUsername().equals("w83ll43")) {
-            return Result.error("用户未授权");
-        }
+        IsUserLogin(request);
 
         // 3、删除
         this.removeById(id);

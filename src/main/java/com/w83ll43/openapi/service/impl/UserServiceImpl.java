@@ -2,6 +2,8 @@ package com.w83ll43.openapi.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.w83ll43.openapi.common.BusinessException;
+import com.w83ll43.openapi.common.Code;
 import com.w83ll43.openapi.common.Result;
 import com.w83ll43.openapi.entity.User;
 import com.w83ll43.openapi.mapper.UserMapper;
@@ -35,7 +37,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         // 1、校验
         // 参数不能为空
         if (StringUtils.isAnyBlank(username, password, checkPassword)) {
-            return Result.error("参数不能为空");
+            throw new BusinessException(Code.PARAMS_ERROR.getCode(), "参数为空");
         }
 
         if (!password.equals(checkPassword)) {
@@ -48,7 +50,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         User user = this.baseMapper.selectOne(queryWrapper);
 
         if (user != null) {
-            return Result.error("用户已经存在");
+            throw new BusinessException(Code.NO_SUCH_USER.getCode(), "用户不存在");
         }
 
         // 3、加密密码
@@ -73,7 +75,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     public Result<UserVo> login(String username, String password, HttpServletRequest request) {
         // 1、校验
         if (StringUtils.isAnyBlank(username, password)) {
-            return Result.error("参数为空");
+            throw new BusinessException(Code.PARAMS_ERROR.getCode(), "参数为空");
         }
 
         // 2、密码在加密
@@ -87,12 +89,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
         // 3.1、用户不存在
         if (user == null) {
-            return Result.error("用户不存在");
+            throw new BusinessException(Code.NO_SUCH_USER.getCode(), "用户不存在");
         }
 
         // 用户密码错误
         if (!user.getPassword().equals(encryptPassword)) {
-            return Result.error("用户密码错误");
+            throw new BusinessException(Code.PASSWORD_ERROR.getCode(), "用户密码错误");
         }
 
         // 3.2、用户存在
@@ -114,7 +116,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         // 1、判断用户是否已经登录
         User user = (User)request.getSession().getAttribute("user_login_status");
         if (user == null) {
-            return Result.error("用户未登录");
+            throw new BusinessException(Code.NOT_LOGIN.getCode(), "用户未登录");
         }
 
         // 2、移除 session 信息

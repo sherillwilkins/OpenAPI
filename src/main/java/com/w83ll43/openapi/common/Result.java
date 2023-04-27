@@ -60,6 +60,20 @@ public class Result<T> implements Serializable {
     }
 
     /**
+     * 失败
+     * @param code
+     * @param message
+     * @return
+     * @param <T>
+     */
+    public static <T> Result<T> error(int code, String message) {
+        Result<T> result = new Result<>();
+        result.code = code;
+        result.message = message;
+        return result;
+    }
+
+    /**
      * 向动态数据添加数据
      * @param key
      * @param value

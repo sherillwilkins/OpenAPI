@@ -1,6 +1,7 @@
 package com.w83ll43.openapi.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.w83ll43.openapi.common.BusinessException;
 import com.w83ll43.openapi.common.Result;
 import com.w83ll43.openapi.entity.InterfaceInfo;
 import com.w83ll43.openapi.service.InterfaceInfoService;
@@ -71,6 +72,15 @@ public class InterfaceInfoController {
     @DeleteMapping("/{id}")
     public Result<String> deleteInterfaceById(@PathVariable Long id, HttpServletRequest request) {
         return interfaceInfoService.deleteInterfaceById(id, request);
+    }
+
+    /**
+     * 测试全局异常处理
+     * @return
+     */
+    @GetMapping
+    public Result<String> testExceptionHandler() {
+        throw new BusinessException(200, "自定义业务异常");
     }
 
 }
