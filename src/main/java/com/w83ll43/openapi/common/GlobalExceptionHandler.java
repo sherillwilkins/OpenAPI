@@ -31,6 +31,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = RuntimeException.class)
     public Result<String> exceptionHandler(RuntimeException e) {
+        log.error(e.getMessage());
         return Result.error("系统错误");
     }
 }

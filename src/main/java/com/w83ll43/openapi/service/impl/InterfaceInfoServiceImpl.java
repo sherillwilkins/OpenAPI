@@ -3,6 +3,7 @@ package com.w83ll43.openapi.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.w83ll43.openapi.common.BaseContext;
 import com.w83ll43.openapi.common.BusinessException;
 import com.w83ll43.openapi.common.Code;
 import com.w83ll43.openapi.common.Result;
@@ -14,7 +15,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 
 /**
 * @author w83ll43
@@ -49,9 +49,6 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         }
 
         // 3、添加
-        interfaceInfo.setCreateTime(LocalDateTime.now());
-        interfaceInfo.setUpdateTime(LocalDateTime.now());
-        interfaceInfo.setCreateUser(user.getId());
         this.save(interfaceInfo);
 
         return Result.success(interfaceInfo);
@@ -90,12 +87,12 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
      * @param request
      */
     private void IsUserLogin(HttpServletRequest request) {
-        User user = (User) request.getSession().getAttribute("user_login_status");
-        if (user == null) {
+        Long userId = BaseContext.getCurrentId();
+        if (userId == null) {
             throw new BusinessException(Code.NOT_LOGIN.getCode(), "用户未登录");
         }
 
-        if (!user.getUsername().equals("w83ll43")) {
+        if (userId.longValue() != 1650498539809599489L) {
             throw new BusinessException(Code.NO_AUTH_ERROR.getCode(), "用户无权限");
         }
     }
@@ -150,10 +147,7 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         // 2、判断用户是否登录以及用户是否拥有权限
         IsUserLogin(request);
 
-        // 3、修改公共字段的值
-        interfaceInfo.setUpdateTime(LocalDateTime.now());
-
-        // 4、更新
+        // 3、更新
         this.updateById(interfaceInfo);
 
         return Result.success("更新接口信息成功");

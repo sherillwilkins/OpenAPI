@@ -40,11 +40,13 @@ public class InterfaceInfo implements Serializable {
     /**
      * 请求头
      */
+    @TableField(value = "requestHeader")
     private String requestHeader;
 
     /**
      * 响应头
      */
+    @TableField(value = "responseHeader")
     private String responseHeader;
 
     /**
@@ -72,12 +74,13 @@ public class InterfaceInfo implements Serializable {
     /**
      * 是否删除
      */
+    @TableField(value = "isDeleted")
     private Integer isDeleted;
 
     /**
      * 创建人
      */
-    @TableField(value = "createUser")
+    @TableField(value = "createUser", fill = FieldFill.INSERT)
     private Long createUser;
 
     @TableField(exist = false)
