@@ -38,4 +38,10 @@ public interface UserService extends IService<User> {
      * @return
      */
     Result<String> logout(HttpServletRequest request);
+
+    /**
+     * 生成签名
+     * @return
+     */
+    Result<String> generateSign();
 }

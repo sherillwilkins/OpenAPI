@@ -1,7 +1,11 @@
 package com.w83ll43.openapi.service.impl;
 
+import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.asymmetric.Sign;
+import cn.hutool.crypto.asymmetric.SignAlgorithm;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.w83ll43.openapi.common.BaseContext;
 import com.w83ll43.openapi.common.BusinessException;
 import com.w83ll43.openapi.common.Code;
 import com.w83ll43.openapi.common.Result;
@@ -122,6 +126,33 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         // 2、移除 session 信息
         request.getSession().removeAttribute("user_login_status");
         return Result.success("退出登录成功");
+    }
+
+    /**
+     * 生成签名
+     * @return
+     */
+    @Override
+    public Result<String> generateSign() {
+        // 1、获取当前登录用户 ID
+        Long id = BaseContext.getCurrentId();
+
+        // 2、查询当前用户
+        User user = this.getById(id);
+
+        // 3、生成 accessKey 和 secretKey
+        String accessKey = user.getUsername();
+        Sign sign = SecureUtil.sign(SignAlgorithm.MD5withRSA);
+        byte[] bytes = sign.sign(accessKey.getBytes());
+        String secretKey = new String(bytes);
+
+        // 4、设置 accessKey 和 secretKey
+        user.setAccessKey(accessKey);
+        user.setSecretKey(secretKey);
+
+        // 5、更新数据
+        this.updateById(user);
+        return Result.success("生成签名成功！");
     }
 }
 

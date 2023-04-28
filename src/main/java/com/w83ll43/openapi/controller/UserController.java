@@ -49,4 +49,13 @@ public class UserController {
         return userService.logout(request);
     }
 
+    /**
+     * 生成签名
+     * @return
+     */
+    @GetMapping("/sign")
+    public Result<String> generateSign() {
+        return userService.generateSign();
+    }
+
 }
