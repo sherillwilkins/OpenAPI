@@ -3,13 +3,15 @@ package com.w83ll43.openapi.client;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.asymmetric.Sign;
 import cn.hutool.crypto.asymmetric.SignAlgorithm;
-import com.w83ll43.openapi.common.Result;
 import com.w83ll43.openapi.entity.User;
 import com.w83ll43.openapi.service.UserService;
+import com.w83ll43.openapisdk.client.OpenAPIClient;
+import com.w83ll43.openapisdk.entity.Sentence;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
+import java.io.UnsupportedEncodingException;
 
 @SpringBootTest
 public class ClientTest {
@@ -17,15 +19,15 @@ public class ClientTest {
     @Resource
     private UserService userService;
 
+    @Resource
+    private OpenAPIClient client;
+
     @Test
     void test() {
-        String phone = "13412345678";
         User user = userService.getById(1650498539809599489L);
-        OpenAPIClient client = new OpenAPIClient(user.getAccessKey(), user.getSecretKey());
-        Result code = client.userSendMegInReggie(phone);
-        String result = client.userLoginInReggie(phone, (String) code.getData());
-        System.out.println("code = " + code);
-        System.out.println("result = " + result);
+        OpenAPIClient1 client = new OpenAPIClient1(user.getAccessKey(), "secret1");
+        String sentence = client.getSentence("a");
+        System.out.println("sentence = " + sentence);
     }
 
     void createKey() {
@@ -35,5 +37,11 @@ public class ClientTest {
         String secretKey = new String(bytes);
         System.out.println("accessKey = " + accessKey);
         System.out.println("secretKey = " + secretKey);
+    }
+
+    @Test
+    void testSDK() throws UnsupportedEncodingException {
+        Sentence sentence = client.getRandomSentenceByType("a");
+        System.out.println("sentence = " + sentence.getHitokoto());
     }
 }

@@ -13,7 +13,7 @@ import java.util.HashMap;
 /**
  * 调用第三方接口的客户端
  */
-public class OpenAPIClient {
+public class OpenAPIClient1 {
 
     private static final String GATEWAY_HOST = "http://47.113.223.234:8080";
 
@@ -21,7 +21,7 @@ public class OpenAPIClient {
 
     private String secretKey;
 
-    public OpenAPIClient(String accessKey, String secretKey) {
+    public OpenAPIClient1(String accessKey, String secretKey) {
         this.accessKey = accessKey;
         this.secretKey = secretKey;
     }
@@ -65,6 +65,21 @@ public class OpenAPIClient {
         hashMap.put("timestamp", String.valueOf(System.currentTimeMillis() / 1000));
         hashMap.put("sign", SignUtils.genSign(body, secretKey));
         return hashMap;
+    }
+
+    public String getSentence(String type) {
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("accessKey", this.accessKey);
+
+//        Sign sign = SecureUtil.sign(SignAlgorithm.MD5withRSA);
+//        byte[] signed = sign.sign(this.secretKey.getBytes());
+//        hashMap.put("sign", new String(signed));
+        hashMap.put("sign", this.secretKey);
+
+        String result = HttpRequest.get("http://localhost:8081/sentences/get/" + type)
+                .addHeaders(hashMap)
+                .execute().body();
+        return result;
     }
 
 }

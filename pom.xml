@@ -35,6 +35,13 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- 引入 SDK -->
+        <dependency>
+            <groupId>com.w83ll43</groupId>
+            <artifactId>OpenAPISDK</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+
         <!-- 引入 mybatis-plus 依赖 -->
         <dependency>
             <groupId>com.baomidou</groupId>

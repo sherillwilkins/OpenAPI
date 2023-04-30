@@ -20,4 +20,7 @@ mybatis-plus:
   type-aliases-package: com.w83ll43.openapi.entity
   mapper-locations: classpath:mapper/*.xml
 
-
+openapi:
+  client:
+    access-key: w83ll43
+    secret-key: secret
