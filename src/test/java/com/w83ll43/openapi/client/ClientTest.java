@@ -6,6 +6,7 @@ import cn.hutool.crypto.asymmetric.SignAlgorithm;
 import com.w83ll43.openapi.entity.User;
 import com.w83ll43.openapi.service.UserService;
 import com.w83ll43.openapisdk.client.OpenAPIClient;
+import com.w83ll43.openapisdk.entity.JokeText;
 import com.w83ll43.openapisdk.entity.Sentence;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -40,8 +41,16 @@ public class ClientTest {
     }
 
     @Test
-    void testSDK() throws UnsupportedEncodingException {
+    void testSDKSentence() throws UnsupportedEncodingException {
         Sentence sentence = client.getRandomSentenceByType("a");
         System.out.println("sentence = " + sentence.getHitokoto());
+    }
+
+    @Test
+    void testSDKJoke() throws UnsupportedEncodingException {
+        JokeText joke = client.getRandomJoke();
+        if (joke != null) {
+            System.out.println("joke = " + joke.getText());
+        }
     }
 }
