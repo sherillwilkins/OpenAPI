@@ -1,1 +1,30 @@
-
+server:
+  port: 8082
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: api_route
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/**
+#          filters:
+#            - name: customGlobalFilter
+      default-filters:
+        - AddResponseHeader=source, gateway
+logging:
+  level:
+    org:
+      springframework:
+        cloud:
+          gateway: trace
+# 配置 dubbo
+dubbo:
+  application:
+    name: consumer
+  protocol:
+    name: dubbo
+    port: -1
+  registry:
+    id: nacos-registry
+    address: nacos://localhost:8848
