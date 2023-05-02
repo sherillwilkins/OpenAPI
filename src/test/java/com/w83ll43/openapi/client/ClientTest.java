@@ -6,12 +6,14 @@ import cn.hutool.crypto.asymmetric.SignAlgorithm;
 import com.w83ll43.openapi.entity.User;
 import com.w83ll43.openapi.service.UserService;
 import com.w83ll43.openapisdk.client.OpenAPIClient;
-import com.w83ll43.openapisdk.entity.JokeText;
-import com.w83ll43.openapisdk.entity.Sentence;
+import com.w83ll43.openapisdk.constant.SDKConstant;
+import com.w83ll43.openapisdk.model.entity.Sentence;
+import com.w83ll43.openapisdk.model.response.ApiResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 @SpringBootTest
@@ -48,9 +50,24 @@ public class ClientTest {
 
     @Test
     void testSDKJoke() throws UnsupportedEncodingException {
-        JokeText joke = client.getRandomJoke();
-        if (joke != null) {
-            System.out.println("joke = " + joke.getText());
+        ApiResponse apiResponse = client.getRandomJokeByClient();
+        try {
+            System.out.println(getResultString(apiResponse));
+        }catch (Exception ex){
+            ex.printStackTrace();
         }
+    }
+
+    private static String getResultString(ApiResponse response) throws IOException {
+        StringBuilder result = new StringBuilder();
+        result.append("Response from backend server").append(SDKConstant.CLOUDAPI_LF).append(SDKConstant.CLOUDAPI_LF);
+        result.append("ResultCode:").append(SDKConstant.CLOUDAPI_LF).append(response.getCode()).append(SDKConstant.CLOUDAPI_LF).append(SDKConstant.CLOUDAPI_LF);
+        if(response.getCode() != 200){
+            result.append("Error description:").append(response.getHeaders().get("X-Ca-Error-Message")).append(SDKConstant.CLOUDAPI_LF).append(SDKConstant.CLOUDAPI_LF);
+        }
+
+        result.append("ResultBody:").append(SDKConstant.CLOUDAPI_LF).append(new String(response.getBody() , SDKConstant.CLOUDAPI_ENCODING));
+
+        return result.toString();
     }
 }
