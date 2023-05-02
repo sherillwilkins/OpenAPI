@@ -1,13 +1,14 @@
 package com.w83ll43.openapi;
 
 import com.w83ll43.openapi.filter.LoginCheckFilter;
+import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Bean;
 
-//@EnableDubbo
+@EnableDubbo
 // 过滤器扫描
 @ServletComponentScan
 @SpringBootApplication
