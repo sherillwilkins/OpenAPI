@@ -3,7 +3,7 @@ package com.w83ll43.openapi.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.w83ll43.openapi.common.Result;
-import com.w83ll43.openapi.entity.InterfaceInfo;
+import com.w83ll43.openapicommon.model.InterfaceInfo;
 
 import javax.servlet.http.HttpServletRequest;
 

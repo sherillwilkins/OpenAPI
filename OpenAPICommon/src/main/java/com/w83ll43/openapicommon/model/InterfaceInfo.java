@@ -1,4 +1,4 @@
-package com.w83ll43.openapi.entity;
+package com.w83ll43.openapicommon.model;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;

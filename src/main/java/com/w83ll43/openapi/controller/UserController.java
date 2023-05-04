@@ -2,13 +2,13 @@ package com.w83ll43.openapi.controller;
 
 
 import com.w83ll43.openapi.common.Result;
-import com.w83ll43.openapi.entity.User;
 import com.w83ll43.openapi.service.UserService;
 import com.w83ll43.openapi.vo.UserVo;
+import com.w83ll43.openapicommon.model.User;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/user")
 public class UserController {
 
-    @Autowired
+    @Resource
     private UserService userService;
 
     /**
@@ -58,4 +58,12 @@ public class UserController {
         return userService.generateSign();
     }
 
+    /**
+     * 生成 AccessKey 和 SecretKey
+     * @return
+     */
+    @GetMapping("/genkey")
+    public Result<User> generateAccessKeyAndSecretKey() {
+        return userService.generateAccessKeyAndSecret();
+    }
 }

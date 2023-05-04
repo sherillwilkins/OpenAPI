@@ -2,8 +2,8 @@ package com.w83ll43.openapi.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.w83ll43.openapi.common.Result;
-import com.w83ll43.openapi.entity.User;
 import com.w83ll43.openapi.vo.UserVo;
+import com.w83ll43.openapicommon.model.User;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -44,4 +44,10 @@ public interface UserService extends IService<User> {
      * @return
      */
     Result<String> generateSign();
+
+    /**
+     * 生成 AccessKey 和 SecretKey
+     * @return
+     */
+    Result<User> generateAccessKeyAndSecret();
 }

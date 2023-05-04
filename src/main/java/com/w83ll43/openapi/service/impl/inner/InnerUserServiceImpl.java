@@ -1,6 +1,5 @@
 package com.w83ll43.openapi.service.impl.inner;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.w83ll43.openapi.service.UserService;
 import com.w83ll43.openapicommon.model.User;
@@ -22,13 +21,10 @@ public class InnerUserServiceImpl implements InnerUserService {
      */
     @Override
     public User getInvokeUser(String accessKey) {
-        QueryWrapper<com.w83ll43.openapi.entity.User> queryWrapper = new QueryWrapper<>();
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("access_key", accessKey);
 
-        com.w83ll43.openapi.entity.User user = userService.getOne(queryWrapper);
-
-        User result = new User();
-        BeanUtil.copyProperties(user, result);
-        return result;
+        User user = userService.getOne(queryWrapper);
+        return user;
     }
 }

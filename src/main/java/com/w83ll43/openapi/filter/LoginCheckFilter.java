@@ -3,7 +3,7 @@ package com.w83ll43.openapi.filter;
 import com.alibaba.fastjson.JSON;
 import com.w83ll43.openapi.common.BaseContext;
 import com.w83ll43.openapi.common.Result;
-import com.w83ll43.openapi.entity.User;
+import com.w83ll43.openapicommon.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.AntPathMatcher;
 
@@ -39,6 +39,7 @@ public class LoginCheckFilter implements Filter {
         // 定义不需要处理的请求路径
         String[] urls = new String[]{
                 "/user/login",
+                "/user/register"
         };
 
         // 2、判断本次请求是否需要处理

@@ -7,10 +7,10 @@ import com.w83ll43.openapi.common.BaseContext;
 import com.w83ll43.openapi.common.BusinessException;
 import com.w83ll43.openapi.common.Code;
 import com.w83ll43.openapi.common.Result;
-import com.w83ll43.openapi.entity.InterfaceInfo;
-import com.w83ll43.openapi.entity.User;
 import com.w83ll43.openapi.mapper.InterfaceInfoMapper;
 import com.w83ll43.openapi.service.InterfaceInfoService;
+import com.w83ll43.openapicommon.model.InterfaceInfo;
+import com.w83ll43.openapicommon.model.User;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 

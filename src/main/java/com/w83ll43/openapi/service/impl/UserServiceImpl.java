@@ -9,10 +9,11 @@ import com.w83ll43.openapi.common.BaseContext;
 import com.w83ll43.openapi.common.BusinessException;
 import com.w83ll43.openapi.common.Code;
 import com.w83ll43.openapi.common.Result;
-import com.w83ll43.openapi.entity.User;
 import com.w83ll43.openapi.mapper.UserMapper;
 import com.w83ll43.openapi.service.UserService;
+import com.w83ll43.openapi.utils.AppUtils;
 import com.w83ll43.openapi.vo.UserVo;
+import com.w83ll43.openapicommon.model.User;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -153,6 +154,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         // 5、更新数据
         this.updateById(user);
         return Result.success("生成签名成功！");
+    }
+
+    /**
+     * 生成 AccessKey 和 SecretKey
+     * @return
+     */
+    @Override
+    public Result<User> generateAccessKeyAndSecret() {
+        Long id = BaseContext.getCurrentId();
+        User user = this.getById(id);
+        String appId = AppUtils.getAppId();
+        String appSecret = AppUtils.getAppSecret(appId);
+        user.setAccessKey(appId);
+        user.setSecretKey(appSecret);
+        this.updateById(user);
+        return Result.success(user);
     }
 }
 

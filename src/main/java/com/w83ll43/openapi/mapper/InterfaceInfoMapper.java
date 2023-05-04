@@ -1,7 +1,7 @@
 package com.w83ll43.openapi.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.w83ll43.openapi.entity.InterfaceInfo;
+import com.w83ll43.openapicommon.model.InterfaceInfo;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

@@ -3,8 +3,8 @@ package com.w83ll43.openapi.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.w83ll43.openapi.common.BusinessException;
 import com.w83ll43.openapi.common.Result;
-import com.w83ll43.openapi.entity.InterfaceInfo;
 import com.w83ll43.openapi.service.InterfaceInfoService;
+import com.w83ll43.openapicommon.model.InterfaceInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 

@@ -22,8 +22,8 @@ mybatis-plus:
 
 openapi:
   client:
-    access-key: w83ll43
-    secret-key: secret
+    access-key: dvrMyozd
+    secret-key: 34349f4d56bec282b0be4eb4e683a337de372187
 # 配置 dubbo
 dubbo:
   application:
