@@ -39,15 +39,10 @@ public interface UserService extends IService<User> {
      */
     Result<String> logout(HttpServletRequest request);
 
-    /**
-     * 生成签名
-     * @return
-     */
-    Result<String> generateSign();
 
     /**
      * 生成 AccessKey 和 SecretKey
      * @return
      */
-    Result<User> generateAccessKeyAndSecret();
+    Result<String> generateAccessKeyAndSecret();
 }

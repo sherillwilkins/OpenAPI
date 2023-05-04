@@ -50,20 +50,11 @@ public class UserController {
     }
 
     /**
-     * 生成签名
-     * @return
-     */
-    @GetMapping("/sign")
-    public Result<String> generateSign() {
-        return userService.generateSign();
-    }
-
-    /**
      * 生成 AccessKey 和 SecretKey
      * @return
      */
-    @GetMapping("/genkey")
-    public Result<User> generateAccessKeyAndSecretKey() {
+    @GetMapping("/sign")
+    public Result<String> generateAccessKeyAndSecretKey() {
         return userService.generateAccessKeyAndSecret();
     }
 }

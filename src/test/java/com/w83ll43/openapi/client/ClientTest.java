@@ -4,7 +4,6 @@ import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.asymmetric.Sign;
 import cn.hutool.crypto.asymmetric.SignAlgorithm;
 import com.w83ll43.openapi.service.UserService;
-import com.w83ll43.openapicommon.model.User;
 import com.w83ll43.openapisdk.client.OpenAPIClient;
 import com.w83ll43.openapisdk.model.response.ApiResponse;
 import org.junit.jupiter.api.Test;
@@ -21,13 +20,6 @@ public class ClientTest {
     @Resource
     private OpenAPIClient client;
 
-    @Test
-    void test() {
-        User user = userService.getById(1650498539809599489L);
-        OpenAPIClient1 client = new OpenAPIClient1(user.getAccessKey(), "secret1");
-        String sentence = client.getSentence("a");
-        System.out.println("sentence = " + sentence);
-    }
 
     void createKey() {
         String accessKey = "w83ll43";
@@ -39,8 +31,28 @@ public class ClientTest {
     }
 
     @Test
+    void testSDKSentencePost() {
+        ApiResponse apiResponse = client.getRandomSentencePostByType("a");
+        try {
+            System.out.println(OpenAPIClient.getResultString(apiResponse));
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
+
+    @Test
+    void testSDKSentenceGet() {
+        ApiResponse apiResponse = client.getRandomSentenceGetByType("a");
+        try {
+            System.out.println(OpenAPIClient.getResultString(apiResponse));
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
+
+    @Test
     void testSDKJoke() {
-        ApiResponse apiResponse = client.getRandomSentenceByClient("a");
+        ApiResponse apiResponse = client.getRandomJoke();
         try {
             System.out.println(OpenAPIClient.getResultString(apiResponse));
         }catch (Exception ex){

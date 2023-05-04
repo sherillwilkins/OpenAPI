@@ -1,8 +1,5 @@
 package com.w83ll43.openapi.service.impl;
 
-import cn.hutool.crypto.SecureUtil;
-import cn.hutool.crypto.asymmetric.Sign;
-import cn.hutool.crypto.asymmetric.SignAlgorithm;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.w83ll43.openapi.common.BaseContext;
@@ -65,6 +62,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         user = new User();
         user.setUsername(username);
         user.setPassword(encryptPassword);
+
+        // 5、生成 accessKey 和 secretKey
+        String appId = AppUtils.getAppId();
+        String appSecret = AppUtils.getAppSecret(appId);
+        user.setAccessKey(appId);
+        user.setSecretKey(appSecret);
+
         this.save(user);
         return Result.success(user);
     }
@@ -89,7 +93,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         // 3、查询用户是否存在
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username", username);
-//        queryWrapper.eq("password", encryptPassword);
         User user = this.baseMapper.selectOne(queryWrapper);
 
         // 3.1、用户不存在
@@ -130,11 +133,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     /**
-     * 生成签名
+     * 生成 AccessKey 和 SecretKey
      * @return
      */
     @Override
-    public Result<String> generateSign() {
+    public Result<String> generateAccessKeyAndSecret() {
         // 1、获取当前登录用户 ID
         Long id = BaseContext.getCurrentId();
 
@@ -142,34 +145,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         User user = this.getById(id);
 
         // 3、生成 accessKey 和 secretKey
-        String accessKey = user.getUsername();
-        Sign sign = SecureUtil.sign(SignAlgorithm.MD5withRSA);
-        byte[] bytes = sign.sign(accessKey.getBytes());
-        String secretKey = new String(bytes);
-
-        // 4、设置 accessKey 和 secretKey
-        user.setAccessKey(accessKey);
-        user.setSecretKey(secretKey);
-
-        // 5、更新数据
-        this.updateById(user);
-        return Result.success("生成签名成功！");
-    }
-
-    /**
-     * 生成 AccessKey 和 SecretKey
-     * @return
-     */
-    @Override
-    public Result<User> generateAccessKeyAndSecret() {
-        Long id = BaseContext.getCurrentId();
-        User user = this.getById(id);
         String appId = AppUtils.getAppId();
         String appSecret = AppUtils.getAppSecret(appId);
         user.setAccessKey(appId);
         user.setSecretKey(appSecret);
+
+        // 5、更新数据
         this.updateById(user);
-        return Result.success(user);
+        return Result.success("生成签名成功！");
     }
 }
 
